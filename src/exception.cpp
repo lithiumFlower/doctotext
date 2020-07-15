@@ -36,14 +36,14 @@
 
 #include <list>
 
-using namespace doctotext;
+using namespace doctotextex;
 
-struct Exception::Implementation
+struct CustomException::Implementation
 {
 	std::list<std::string> m_errors;
 };
 
-Exception::Exception() throw()
+CustomException::CustomException() throw()
 {
 	try
 	{
@@ -58,7 +58,7 @@ Exception::Exception() throw()
 	}
 }
 
-Exception::Exception(const std::string &first_error_message) throw()
+CustomException::CustomException(const std::string &first_error_message) throw()
 {
 	try
 	{
@@ -74,7 +74,7 @@ Exception::Exception(const std::string &first_error_message) throw()
 	}
 }
 
-Exception::Exception(const Exception &ex) throw()
+CustomException::CustomException(const CustomException &ex) throw()
 {
 	try
 	{
@@ -90,20 +90,20 @@ Exception::Exception(const Exception &ex) throw()
 	}
 }
 
-Exception::~Exception() throw()
+CustomException::~CustomException() throw()
 {
 	if (impl)
 		delete impl;
 }
 
-Exception& Exception::operator = (const Exception& ex) throw()
+CustomException& CustomException::operator = (const CustomException& ex) throw()
 {
 	*impl = *ex.impl;
 	return *this;
 }
 
 
-std::string Exception::getBacktrace()
+std::string CustomException::getBacktrace()
 {
 	std::string backtrace;
 	for (std::list<std::string>::iterator it = impl->m_errors.begin(); it != impl->m_errors.end(); ++it)
@@ -113,17 +113,17 @@ std::string Exception::getBacktrace()
 	return backtrace;
 }
 
-void Exception::appendError(const std::string &error_message)
+void CustomException::appendError(const std::string &error_message)
 {
 	impl->m_errors.push_back(error_message);
 }
 
-std::list<std::string>::iterator Exception::getErrorIterator() const
+std::list<std::string>::iterator CustomException::getErrorIterator() const
 {
 	return impl->m_errors.begin();
 }
 
-size_t Exception::getErrorCount() const
+size_t CustomException::getErrorCount() const
 {
 	return impl->m_errors.size();
 }

@@ -606,7 +606,7 @@ struct DOCParser::Implementation
 	{
 		if (m_verbose_logging)
 		{
-			if (m_log_stream != std::cerr)
+			if (m_log_stream != &std::cerr)
 				m_cerr_buf_backup = std::cerr.rdbuf(m_log_stream->rdbuf());
 		}
 		else
@@ -617,7 +617,7 @@ struct DOCParser::Implementation
 	{
 		if (m_verbose_logging)
 		{
-			if (m_log_stream != std::cerr)
+			if (m_log_stream != &std::cerr)
 				std::cerr.rdbuf(m_cerr_buf_backup);
 		}
 		else

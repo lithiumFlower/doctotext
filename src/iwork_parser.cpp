@@ -889,7 +889,7 @@ struct IWorkParser::Implementation
 			return false;
 		}
 
-		bool AddTextFromTextualElements()
+		void AddTextFromTextualElements()
 		{
 			m_textual_elements.sort(CompareElements);
 			std::list<TextualElement*>::iterator it = m_textual_elements.begin();
@@ -898,7 +898,7 @@ struct IWorkParser::Implementation
 				m_text_body += (*it)->m_text;
 				++it;
 			}
-		}
+        }
 
 		//Functions responsible for parsing xml elements:
 
@@ -1779,16 +1779,17 @@ struct IWorkParser::Implementation
 				std::map<std::string, XmlElementHandler>::iterator handler = m_handlers.find(m_current_element.m_name);
 				if (handler != m_handlers.end())
 				{
-					if (!m_xml_reader->ReadXmlAttributes(m_current_element))
-						return false;
-					(this->*(handler->second))();
+					if (!m_xml_reader->ReadXmlAttributes(m_current_element)) {
+                        return false;
+                    }
+                    (this->*(handler->second))();
 				}
 				else
 				{
 					if (!m_xml_reader->SkipAttributes())
 						return false;
 				}
-			};
+            };
 			return false;
 		}
 	};
@@ -2057,21 +2058,21 @@ struct IWorkParser::Implementation
 			*m_log_stream << "Error while loading directory.\n";
 			return;
 		}
-		IWorkContent::IWorkType iwork_type = getIWorkType(xml_reader);
+        IWorkContent::IWorkType iwork_type = getIWorkType(xml_reader);
 		if (iwork_type == IWorkContent::encrypted)
 		{
 			m_error = true;
 			*m_log_stream << "File is corrupted or encrypted.\n";
 			return;
 		}
-		iwork_content.setType(iwork_type);
+        iwork_content.setType(iwork_type);
 		text.clear();
 		if (!iwork_content.ParseXmlData())
 		{
 			m_error = true;
 			return;
 		}
-		if (iwork_content.m_header.length() > 0)
+        if (iwork_content.m_header.length() > 0)
 		{
 			if (iwork_content.m_header[iwork_content.m_header.length() - 1] != '\n')
 				iwork_content.m_header += "\n";
@@ -2081,7 +2082,7 @@ struct IWorkParser::Implementation
 			if (iwork_content.m_text_body[iwork_content.m_text_body.length() - 1] != '\n' && iwork_content.m_footer[0] != '\n')
 				iwork_content.m_text_body += "\n";
 		}
-		iwork_content.m_text_body = iwork_content.m_header + iwork_content.m_text_body + iwork_content.m_footer;
+        iwork_content.m_text_body = iwork_content.m_header + iwork_content.m_text_body + iwork_content.m_footer;
 		char* dest_text = new char[iwork_content.m_text_body.length() * 2];
 		decode_html_entities_utf8(dest_text, iwork_content.m_text_body.data());
 		text = std::string(dest_text);

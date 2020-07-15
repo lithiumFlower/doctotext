@@ -2,7 +2,7 @@ ifneq (,$(filter $(ARCH),win32 win64))
 	ifeq ($(ARCH),win32)
 		STRIP = i686-w64-mingw32-strip
 	else
-		STRIP = x86_64-w64-mingw32-strip
+		STRIP = strip
 	endif
 	EXEEXT=.exe
 	SOPRE =
@@ -49,15 +49,15 @@ override ARCH := $(ARCH)-debug
 STRIP = touch
 endif
 
-build: update_version version.h src doc/html
+build: version.h src doc/html
 	$(MAKE) -C 3rdparty htmlcxx
 	$(MAKE) -C 3rdparty wv2
 	$(MAKE) -C 3rdparty unzip
-	$(MAKE) -C 3rdparty aj16
-	$(MAKE) -C 3rdparty ak12
-	$(MAKE) -C 3rdparty ag15
-	$(MAKE) -C 3rdparty ac16
-	$(MAKE) -C 3rdparty ToUnicode
+	#$(MAKE) -C 3rdparty aj16
+	#$(MAKE) -C 3rdparty ak12
+	#$(MAKE) -C 3rdparty ag15
+	#$(MAKE) -C 3rdparty ac16
+	#$(MAKE) -C 3rdparty ToUnicode
 	$(MAKE) -C 3rdparty libcharsetdetect
 	$(MAKE) -C 3rdparty mimetic
 ifeq ($(WIN),1)
@@ -75,13 +75,13 @@ ifeq ($(WIN),1)
 	cp 3rdparty/libxml2/bin/libxml2-2.dll build
 	cp 3rdparty/zlib/bin/zlib1.dll build
 	cp 3rdparty/wv2/bin/libwv2-1.dll build
-	for f in $(subst :, ,$(PATH)); do \
+	IFS=: && for f in $$PATH; do \
 		if test -f "$$f/libgcc_s_sjlj-1.dll"; then \
 			cp "$$f/libgcc_s_sjlj-1.dll" build/; \
 			break; \
 		fi \
 	done
-	for f in $(subst :, ,$(PATH)); do \
+	IFS=: && for f in $$PATH; do \
 		if test -f "$$f/libstdc++-6.dll"; then \
 			cp "$$f/libstdc++-6.dll" build/; \
 			break; \
@@ -125,11 +125,11 @@ endif
 	cp $(foreach f,plain_text_extractor formatting_style metadata doctotext_c_api link exception attachment variant,src/${f}.h) build/
 	mkdir build/doc
 	mkdir build/resources
-	cp ./3rdparty/ac16/CMap/*  build/resources
-	cp ./3rdparty/ag15/CMap/*  build/resources
-	cp ./3rdparty/aj16/CMap/*  build/resources
-	cp ./3rdparty/ak12/CMap/*  build/resources
-	cp ./3rdparty/ToUnicode/*  build/resources
+#	cp ./3rdparty/ac16/CMap/*  build/resources
+#	cp ./3rdparty/ag15/CMap/*  build/resources
+#	cp ./3rdparty/aj16/CMap/*  build/resources
+#	cp ./3rdparty/ak12/CMap/*  build/resources
+#	cp ./3rdparty/ToUnicode/*  build/resources
 	cp ./3rdparty/pdf_font_metrics.txt build/resources
 	cp -r doc/html doc/index.html build/doc
 	cp ChangeLog VERSION build
@@ -138,10 +138,7 @@ endif
 version.h: VERSION
 	echo "#define VERSION \"`cat VERSION`\"" > version.h
 
-.PHONY: update_version
-
-update_version:
-	./update_version.sh
+.PHONY: 
 
 doc/html: doc/Doxyfile src
 	cd doc && \
@@ -161,7 +158,7 @@ snapshot: clean
 	tar -cjvf $$snapshot_fn ../doctotext --exclude .svn --exclude "*.kdev*" --exclude ".DS_Store" --exclude "*.tar.*" --exclude "*.zip" --exclude "VERSION" && \
 	mv $$snapshot_fn .
 
-release: clean update_version
+release: clean 
 	release_fn=$$TMPDIR/doctotext-`cat VERSION | cut -f1,2 -d.`-`date +%Y%m%d`.tar.bz2 && \
 	tar -cjvf $$release_fn ../doctotext --exclude .svn --exclude "*.kdev*" --exclude ".DS_Store" --exclude "*.tar.*" --exclude "*.zip" --exclude "generate*.sh" --exclude "VERSION" && \
 	mv $$release_fn .

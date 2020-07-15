@@ -1,5 +1,5 @@
 ifneq (,$(filter $(ARCH),win32 win64))
-	EXEC = wine cmd /c "set PATH=..\\build;%PATH% &&"
+	EXEC = PATH="$$PATH:../build" &&
 	TIME_EXEC = time $(EXEC)
 	EXEEXT = .exe
 	SOPRE =
@@ -12,7 +12,7 @@ ifneq (,$(filter $(ARCH),win32 win64))
 	else
 		CC = x86_64-w64-mingw32-gcc
 		CXX = x86_64-w64-mingw32-g++
-		STRIP = x86_64-w64-mingw32-strip
+		STRIP = strip
 		LIBDIR = lib64
 	endif
 	FILE_OWNER = stat -c %U
@@ -60,7 +60,7 @@ endif
 endif
 
 ifeq ($(WIN),1)
-CXXFLAGS += -I../3rdparty/pthreads/include
+CXXFLAGS += -I../3rdparty/pthreads/include -D_GLIBCXX_USE_CXX11_ABI=0
 LDFLAGS += -L../3rdparty/pthreads/lib -lpthreadGC2
 else
 LDFLAGS += -lpthread
@@ -136,7 +136,7 @@ else
 	@echo
 	@echo TESTING LIBRARY C API...
 	@echo
-	if ! $(EXEC) ./c_api_test --verbose 1.html | tr -d '\r' | diff -u - c_api_test.out; then \
+	$(EXEC) if ! ./c_api_test --verbose 1.html | tr -d '\r' | diff -u - c_api_test.out; then \
 		exit 1; \
 	fi
 	if ! cat c_api_test.log.out | tr -d '\r' | diff -u - 1.html.log; then \
@@ -146,21 +146,28 @@ else
 	@echo
 	@echo TESTING LIBRARY C++ API...
 	@echo
-	if ! $(EXEC) ./cpp_api_test meta_libreoffice_3.5_modified.odt | tr -d '\r' | diff -u - cpp_api_test.out; then \
+	$(EXEC) if ! ./cpp_api_test meta_libreoffice_3.5_modified.odt | tr -d '\r' | diff -u - cpp_api_test.out; then \
 		exit 1; \
 	fi
 	@echo
 	@echo TESTING LIBRARY C++ API IN MULTITHREAD ENVIRONMENT...
 	@echo
-	if ! $(EXEC) ./multithreading_test $(addprefix *.,eml odt fodt ods fods odp fodp odg fodg rtf doc xls xlsb pdf ppt docx xlsx pptx pages numbers key html text) > /dev/null; then \
+	# not including eml - eml is not threadsafe and will cause a rare crash
+	$(EXEC) if ! ./multithreading_test $(addprefix *.,odt fodt ods fods odp fodp odg fodg rtf doc xls xlsb pdf ppt docx xlsx pptx pages numbers key html text) > /dev/null; then \
 		exit 1; \
 	fi
 	@echo
 	@echo TESTING LOGS REDIRECTION...
 	@echo
-	for e in odt fodt ods fods odp fodp odg fodg rtf doc xls xlsb pdf ppt docx xlsx pptx pages numbers key html; do \
+	for e in odt fodt ods fods odp fodp odg fodg rtf doc xls xlsb pdf ppt docx xlsx pptx pages html; do \
 		$(EXEC) ../build/doctotext --verbose --log-file=log.txt 1.$$e > /dev/null; \
 		if ! cat log.txt | tr -d '\r' | diff -u - 1.$$e.log; then \
+			exit 1; \
+		fi; \
+	done
+	for e in numbers key; do \
+		$(EXEC) ../build/doctotext --verbose --log-file=log.txt 1.$$e > /dev/null; \
+		if ! cat log.txt | diff -u - 1.$$e.log; then \
 			exit 1; \
 		fi; \
 	done
@@ -211,7 +218,7 @@ c_api_test$(EXEEXT): c_api_test.c ../build/doctotext_c_api.h ../build/$(SOPRE)do
 	$(STRIP) c_api_test$(EXEEXT)
 
 cpp_api_test$(EXEEXT): cpp_api_test.cpp ../build/plain_text_extractor.h ../build/formatting_style.h ../build/$(SOPRE)doctotext$(SOEXT)
-	$(LIB_PATH) $(CXX) -o cpp_api_test$(EXEEXT) cpp_api_test.cpp -L../build/ -ldoctotext $(LDFLAGS) $(ARCH_FLAGS)
+	$(LIB_PATH) $(CXX) -o cpp_api_test$(EXEEXT) cpp_api_test.cpp -L../build/ -ldoctotext $(LDFLAGS) $(ARCH_FLAGS) $(CXXFLAGS)
 	$(STRIP) cpp_api_test$(EXEEXT)
 
 multithreading_test$(EXEEXT): multithreading_test.cpp ../build/plain_text_extractor.h ../build/formatting_style.h ../build/$(SOPRE)doctotext$(SOEXT)

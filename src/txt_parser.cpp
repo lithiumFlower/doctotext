@@ -41,8 +41,6 @@
 #include <iostream>
 #include <string.h>
 
-using namespace doctotext;
-
 struct TXTParser::Implementation
 {
 	bool m_error;
@@ -129,12 +127,12 @@ std::string TXTParser::plainText()
 	{
 		std::string encoding;
 		if (!impl->m_data_stream->open())
-			throw Exception("Could not open file: " + impl->m_file_name);
+			throw doctotextex::CustomException("Could not open file: " + impl->m_file_name);
 		std::string content;
 		size_t file_size = impl->m_data_stream->size();
 		content.resize(file_size);
 		if (!impl->m_data_stream->read(&content[0], 1, file_size))
-			throw Exception("Could not read from file: " + impl->m_file_name);
+			throw doctotextex::CustomException("Could not read from file: " + impl->m_file_name);
 		impl->m_data_stream->close();
 		charset_detector = csd_open();
 		if (charset_detector == (csd_t)-1)
@@ -195,7 +193,7 @@ std::string TXTParser::plainText()
 		*impl->m_log_stream << "Error parsing file : bad_alloc\n";
 		impl->m_error = true;
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		if (converter)
 			delete converter;
