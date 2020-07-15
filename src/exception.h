@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 
-namespace doctotext
+namespace doctotextex
 {
 	/**
 		This class is implementation of std::exception, which is used by DocToText.
@@ -13,12 +13,12 @@ namespace doctotext
 
 		In order to create exception just call:
 		\code
-		throw Exception("First error");
+		throw CustomException("First error");
 		\endcode
 
 		You can catch exception and add one more error:
 		\code
-		catch (Exception& ex)
+		catch (CustomException& ex)
 		{
 			ex.appendError("Next error message");
 			throw;
@@ -27,13 +27,13 @@ namespace doctotext
 
 		or you can catch exception and get "backtrace":
 		\code
-		catch (Exception& ex)
+		catch (CustomException& ex)
 		{
 			std::cerr << ex.getBacktrace();
 		}
 		\endcode
 	**/
-	class Exception : public std::exception
+	class CustomException : public std::exception
 	{
 		private:
 			struct Implementation;
@@ -41,19 +41,19 @@ namespace doctotext
 
 		public:
 
-			Exception() throw();
+			CustomException() throw();
 
 			/**
 				The constructor.
 				\param first_error_message first error message (gives information about cause of an error).
 			**/
-			Exception(const std::string& first_error_message) throw();
+			CustomException(const std::string& first_error_message) throw();
 
-			Exception(const Exception& ex) throw();
+			CustomException(const CustomException& ex) throw();
 
-			~Exception() throw();
+			~CustomException() throw();
 
-			Exception& operator = (const Exception& ex) throw();
+			CustomException& operator = (const CustomException& ex) throw();
 
 			const char* what(){ return "doctotext_exception"; }
 
@@ -61,7 +61,7 @@ namespace doctotext
 				returns a string with all error messages. Each error message is separated by "\n".
 				Suppose we have thrown an exception:
 				\code
-				throw Exception("First error message");
+				throw CustomException("First error message");
 				\endcode
 				Next, we have added one more error:
 				\code

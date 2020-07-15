@@ -237,7 +237,7 @@ void DOCTOTEXT_CALL doctotext_extractor_params_set_formatting_style(DocToTextExt
 
 struct DocToTextException
 {
-	Exception m_exception;
+	doctotextex::CustomException m_exception;
 };
 
 void DOCTOTEXT_CALL doctotext_free_exception(DocToTextException* exception)
@@ -689,7 +689,7 @@ static void handle_bad_alloc(DocToTextException** exception)
 	}
 }
 
-static void handle_doctotext_exception(Exception& ex, DocToTextException** exception)
+static void handle_doctotext_exception(doctotextex::CustomException& ex, DocToTextException** exception)
 {
 	try
 	{
@@ -744,7 +744,7 @@ DocToTextExtractedData* DOCTOTEXT_CALL doctotext_process_file(const char* file_n
 		if (exception)
 			handle_bad_alloc(exception);
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		if (extracted_data)
 			delete extracted_data;
@@ -794,7 +794,7 @@ DocToTextExtractedData* DOCTOTEXT_CALL doctotext_process_file_from_buffer(const 
 		if (exception)
 			handle_bad_alloc(exception);
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		if (extracted_data)
 			delete extracted_data;
@@ -842,7 +842,7 @@ DocToTextMetadata* DOCTOTEXT_CALL doctotext_extract_metadata(const char* file_na
 		if (exception)
 			handle_bad_alloc(exception);
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		if (extracted_data)
 			delete extracted_data;
@@ -890,7 +890,7 @@ DocToTextMetadata* DOCTOTEXT_CALL doctotext_extract_metadata_from_buffer(const c
 		if (exception)
 			handle_bad_alloc(exception);
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		if (extracted_data)
 			delete extracted_data;
@@ -912,7 +912,7 @@ int DOCTOTEXT_CALL doctotext_parser_type_by_file_extension(const char* file_name
 	{
 		return 0;
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		return 0;
 	}
@@ -933,7 +933,7 @@ int DOCTOTEXT_CALL doctotext_parser_type_by_file_content(const char *file_name, 
 	{
 		return 0;
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		return 0;
 	}
@@ -954,7 +954,7 @@ int DOCTOTEXT_CALL doctotext_parser_type_by_file_content_from_buffer(const char*
 	{
 		return 0;
 	}
-	catch (Exception& ex)
+	catch (doctotextex::CustomException& ex)
 	{
 		return 0;
 	}

@@ -76,6 +76,7 @@ pthreads: pthreads-$(PTHREADS_VERSION)-$(ARCH).tar.bz2
 	
 pthreads-$(PTHREADS_VERSION)-$(ARCH).tar.bz2:
 	wget http://silvercoders.com/download/3rdparty/pthreads-$(PTHREADS_VERSION)-$(ARCH).tar.bz2
+	wget http://silvercoders.com/download/3rdparty/pthreads-$(PTHREADS_VERSION)-$(ARCH).tar.bz2.sha1
 
 libiconv: libiconv-$(LIBICONV_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c libiconv-$(LIBICONV_VERSION)-$(ARCH).tar.bz2.sha1
@@ -84,6 +85,7 @@ libiconv: libiconv-$(LIBICONV_VERSION)-$(ARCH).tar.bz2
 
 libiconv-$(LIBICONV_VERSION)-$(ARCH).tar.bz2:
 	wget http://silvercoders.com/download/3rdparty/libiconv-$(LIBICONV_VERSION)-$(ARCH).tar.bz2
+	wget http://silvercoders.com/download/3rdparty/libiconv-$(LIBICONV_VERSION)-$(ARCH).tar.bz2.sha1
 
 zlib: zlib-$(ZLIB_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c zlib-$(ZLIB_VERSION)-$(ARCH).tar.bz2.sha1
@@ -92,6 +94,7 @@ zlib: zlib-$(ZLIB_VERSION)-$(ARCH).tar.bz2
 
 zlib-$(ZLIB_VERSION)-$(ARCH).tar.bz2:
 	wget http://silvercoders.com/download/3rdparty/zlib-$(ZLIB_VERSION)-$(ARCH).tar.bz2
+	wget http://silvercoders.com/download/3rdparty/zlib-$(ZLIB_VERSION)-$(ARCH).tar.bz2.sha1
 
 libxml2: libxml2-$(LIBXML2_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c libxml2-$(LIBXML2_VERSION)-$(ARCH).tar.bz2.sha1
@@ -100,6 +103,7 @@ libxml2: libxml2-$(LIBXML2_VERSION)-$(ARCH).tar.bz2
 
 libxml2-$(LIBXML2_VERSION)-$(ARCH).tar.bz2:
 	wget http://silvercoders.com/download/3rdparty/libxml2-$(LIBXML2_VERSION)-$(ARCH).tar.bz2
+	wget http://silvercoders.com/download/3rdparty/libxml2-$(LIBXML2_VERSION)-$(ARCH).tar.bz2.sha1
 
 endif
 
@@ -120,9 +124,11 @@ wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2 wv2-$(WV2_VERSION)-private
 
 wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2.sha1
 
 wv2-$(WV2_VERSION)-private_headers.tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-private_headers.tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-private_headers.tar.bz2.sha1
 
 htmlcxx: htmlcxx-$(HTMLCXX_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c htmlcxx-$(HTMLCXX_VERSION)-$(ARCH).tar.bz2.sha1
@@ -131,6 +137,7 @@ htmlcxx: htmlcxx-$(HTMLCXX_VERSION)-$(ARCH).tar.bz2
 
 htmlcxx-$(HTMLCXX_VERSION)-$(ARCH).tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/htmlcxx-$(HTMLCXX_VERSION)-$(ARCH).tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/htmlcxx-$(HTMLCXX_VERSION)-$(ARCH).tar.bz2.sha1
 	
 libcharsetdetect: libcharsetdetect-$(LIBCHARSETDETECT_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c libcharsetdetect-$(LIBCHARSETDETECT_VERSION)-$(ARCH).tar.bz2.sha1
@@ -139,6 +146,7 @@ libcharsetdetect: libcharsetdetect-$(LIBCHARSETDETECT_VERSION)-$(ARCH).tar.bz2
 	
 libcharsetdetect-$(LIBCHARSETDETECT_VERSION)-$(ARCH).tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/libcharsetdetect-$(LIBCHARSETDETECT_VERSION)-$(ARCH).tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/libcharsetdetect-$(LIBCHARSETDETECT_VERSION)-$(ARCH).tar.bz2.sha1
 
 ifeq ($(ARCH),win32)
 mimetic: mimetic-$(MIMETIC_VERSION)-$(ARCH)-2.tar.bz2
@@ -148,6 +156,7 @@ mimetic: mimetic-$(MIMETIC_VERSION)-$(ARCH)-2.tar.bz2
 
 mimetic-$(MIMETIC_VERSION)-$(ARCH)-2.tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/mimetic-$(MIMETIC_VERSION)-$(ARCH)-2.tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/mimetic-$(MIMETIC_VERSION)-$(ARCH)-2.tar.bz2.sha1
 else
 mimetic: mimetic-$(MIMETIC_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c mimetic-$(MIMETIC_VERSION)-$(ARCH).tar.bz2.sha1
@@ -156,6 +165,7 @@ mimetic: mimetic-$(MIMETIC_VERSION)-$(ARCH).tar.bz2
 
 mimetic-$(MIMETIC_VERSION)-$(ARCH).tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/mimetic-$(MIMETIC_VERSION)-$(ARCH).tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/mimetic-$(MIMETIC_VERSION)-$(ARCH).tar.bz2.sha1
 endif
 
 unzip: unzip101e/unzip.o
