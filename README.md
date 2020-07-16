@@ -28,9 +28,13 @@ Ensure the following are installed and in the path:
 The most recent compilation was done in a git-bash shell using mingw64
 
 #### Mac
+Building on Mac will take some extra work. My initial attempt was not an "all in a days work" task. It appears that the 3rdparty libraries like wv2 are compiled against libstdc++. The standard on OSX is now libc++. I no longer have the requisite headers available on my machine to compile against libstdc++ - as of Xcode 10 this support was dropped. This leads to:
+1. Udating the 3rdparty libraries. Most of them shouldn't be so bad but wv2 will be a bit more of a lift. Normally wv2 requires gsf which in turn requires glib, however SILVERCODERS has patched their ancient version (0.2.3) to no longer rely on gsf+glib. Additionally it takes different interface (the custom ThreadSafeOLEStorage class instead opposed to buffers and strings). In order to preserve the distributable nature of the package gsf and glib will need to be repackaged along with a modern version of wv2. The new classes of wv2 (OLEStorage, OLEStreamReader, over AbstractOLEStorage, AbstractOLEStreamReader) will need to be used. And finally, the new classes cause other glib/gsf dependent changes, such as stream changes for compatibility with GsfInput. I hope I've missed a simpler alternative.
+2. Finding an alternative sustainable means of compiling against libstdc++ on OSX
 
 
 #### Linux
+TODO
 
 
 ### What is DocToText

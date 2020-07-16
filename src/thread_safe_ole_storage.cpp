@@ -133,6 +133,12 @@ struct ThreadSafeOLEStorage::Implementation
 	{
 		if (m_data_stream)
 			delete m_data_stream;
+
+		// m_child_directories and m_inside_directories are all duplicate pointers of entries in
+		// m_directories so no need to delete those
+		for (DirectoryEntry *d : m_directories) {
+		    delete d;
+		}
 	}
 
 	void getStreamPositions(std::vector<uint32_t>& stream_positions, bool mini_stream, DirectoryEntry* dir_entry)
@@ -267,6 +273,7 @@ struct ThreadSafeOLEStorage::Implementation
 				try
 				{
 					directory = NULL;
+					// TODO: update to managed pointers
 					directory = new DirectoryEntry;
 					directory->m_added = false;
 					uint16_t unichars[32];
@@ -274,6 +281,7 @@ struct ThreadSafeOLEStorage::Implementation
 					{
 						m_error = "Error in reading directory name";
 						m_is_valid_ole = false;
+						delete directory;
 						return;
 					}
 					for (int j = 0; j < 32; ++j)
@@ -290,19 +298,23 @@ struct ThreadSafeOLEStorage::Implementation
 						}
 						directory->m_name += unichar_to_utf8(ch);
 					}
-					if (!skipBytes(2))
-						return;
+					if (!skipBytes(2)) {
+                        delete directory;
+                        return;
+                    }
 					uint8_t object_type;
 					if (!m_data_stream->read(&object_type, sizeof(uint8_t), 1))
 					{
 						m_error = "Error in reading type of object";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					if (object_type != 0x00 && object_type != 0x01 && object_type != 0x02 && object_type != 0x05)
 					{
 						m_error = "Invalid type of object";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					directory->m_object_type = (DirectoryEntry::ObjectType)object_type;
@@ -311,12 +323,14 @@ struct ThreadSafeOLEStorage::Implementation
 					{
 						m_error = "Error in reading color flag";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					if (color_flag != 0x00 && color_flag != 0x01)
 					{
 						m_error = "Invalid color flag";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					directory->m_color_flag = color_flag;
@@ -324,32 +338,39 @@ struct ThreadSafeOLEStorage::Implementation
 					{
 						m_error = "Error in reading left sibling";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					if (!m_data_stream->read(&directory->m_right_sibling, sizeof(uint32_t), 1))
 					{
 						m_error = "Error in reading directory right sibling";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					if (!m_data_stream->read(&directory->m_child, sizeof(uint32_t), 1))
 					{
 						m_error = "Error in reading child";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
-					if (!skipBytes(36))
-						return;
+					if (!skipBytes(36)) {
+                        delete directory;
+                        return;
+                    }
 					if (!m_data_stream->read(&directory->m_start_sector_location, sizeof(uint32_t), 1))
 					{
 						m_error = "Error in reading sector location";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					if (!m_data_stream->read(&directory->m_stream_size, sizeof(uint64_t), 1))
 					{
 						m_error = "Error in reading sector size";
 						m_is_valid_ole = false;
+                        delete directory;
 						return;
 					}
 					if (m_header_version == 0x03)
