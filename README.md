@@ -1,5 +1,5 @@
 ### Why does this repo exist?
-By no means, with the following list, do I mean to say anything bad about SILVERCODERS. They've made quite a useful utility. Unfortunately it was made quite a long time ago and just needs some modern love.
+SILVERCODERS has worked hard to make a wonderful utility. Unfortunately it was made quite a long time ago and just needs some modern love.
 
 As of 07/14/2020 there were a number of issues with the distributed DocToText on SILVERCODERS website and Sourceforge:
 
