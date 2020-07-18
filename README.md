@@ -1,5 +1,5 @@
 ### Why does this repo exist?
-By no means, with the following list, do I mean to say anything bad about SILVERCODERS. They've made quite a useful utility. Unfortunately it was made quite a long time ago and just needs some modern love.
+SILVERCODERS has worked hard to make a wonderful utility. Unfortunately it was made quite a long time ago and just needs some modern love.
 
 As of 07/14/2020 there were a number of issues with the distributed DocToText on SILVERCODERS website and Sourceforge:
 
@@ -33,9 +33,13 @@ Ensure the following are installed and in the path:
 The most recent compilation was done in a git-bash shell using mingw64
 
 #### Mac
+Building on Mac will take some extra work. My initial attempt was not a "just compile it and ship it over morning coffee" task. It appears that the 3rdparty libraries like wv2 are compiled against libstdc++. The standard on OSX is now libc++. I no longer have the requisite headers available on my machine to compile against libstdc++ - as of Xcode 10 this support was dropped. This leads to:
+1. Udating the 3rdparty libraries. Most of them should be straightforward but wv2 will be a bit more of a lift. Normally wv2 requires gsf which in turn requires glib, however SILVERCODERS has patched their ancient version (0.2.3) to no longer rely on gsf+glib. Additionally it takes different interface (the custom ThreadSafeOLEStorage class instead opposed to buffers and strings). In order to preserve the distributable nature of the package gsf and glib will need to be repackaged along with a modern version of wv2. The new classes of wv2 (OLEStorage, OLEStreamReader, which replace AbstractOLEStorage, AbstractOLEStreamReader) will need to be used. And finally, the new classes cause other glib/gsf dependent changes, such as stream changes for compatibility with GsfInput. I hope I've missed a simpler alternative.
+2. For now I'll probably just make a custom installation of gnu gcc on my mac. 
 
 
 #### Linux
+TODO
 
 
 ### What is DocToText
@@ -56,36 +60,36 @@ DocToText is able to convert corrupted OpenDocument and Office Open XML document
 We also offer the possibility to use the library in commercial applications, with full technical support. The utility is constantly used and tested on thousands of documents by customers all around the world. If interested, please contact us for details.
 
 ### DocToText original README
-/****************************************************************************
-**
-** DocToText - Converts DOC, XLS, XLSB, PPT, RTF, ODF (ODT, ODS, ODP),
-**             OOXML (DOCX, XLSX, PPTX), iWork (PAGES, NUMBERS, KEYNOTE),
-**             ODFXML (FODP, FODS, FODT), PDF, EML and HTML documents to plain text.
-**             Extracts metadata and annotations. 
-**
-** Copyright (c) 2006-2013, SILVERCODERS(R)
-** http://silvercoders.com
-**
-** Project homepage: http://silvercoders.com/en/products/doctotext
-**
-** This program may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file COPYING.GPL included in the
-** packaging of this file.
-**
-** Please remember that any attempt to workaround the GNU General Public
-** License using wrappers, pipes, client/server protocols, and so on
-** is considered as license violation. If your program, published on license
-** other than GNU General Public License version 2, calls some part of this
-** code directly or indirectly, you have to buy commercial license.
-** If you do not like our point of view, simply do not use the product.
-**
-** Licensees holding valid commercial license for this product
-** may use this file in accordance with the license published by
-** SILVERCODERS and appearing in the file COPYING.COM
-**
-** This program is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-**
-*****************************************************************************/
+/****************************************************************************  
+**  
+** DocToText - Converts DOC, XLS, XLSB, PPT, RTF, ODF (ODT, ODS, ODP),  
+**             OOXML (DOCX, XLSX, PPTX), iWork (PAGES, NUMBERS, KEYNOTE),  
+**             ODFXML (FODP, FODS, FODT), PDF, EML and HTML documents to plain text.  
+**             Extracts metadata and annotations.   
+**  
+** Copyright (c) 2006-2013, SILVERCODERS(R)  
+** http://silvercoders.com  
+**  
+** Project homepage: http://silvercoders.com/en/products/doctotext  
+**  
+** This program may be distributed and/or modified under the terms of the  
+** GNU General Public License version 2 as published by the Free Software  
+** Foundation and appearing in the file COPYING.GPL included in the  
+** packaging of this file.  
+**  
+** Please remember that any attempt to workaround the GNU General Public  
+** License using wrappers, pipes, client/server protocols, and so on  
+** is considered as license violation. If your program, published on license  
+** other than GNU General Public License version 2, calls some part of this  
+** code directly or indirectly, you have to buy commercial license.  
+** If you do not like our point of view, simply do not use the product.  
+**  
+** Licensees holding valid commercial license for this product  
+** may use this file in accordance with the license published by  
+** SILVERCODERS and appearing in the file COPYING.COM  
+**  
+** This program is distributed in the hope that it will be useful,  
+** but WITHOUT ANY WARRANTY; without even the implied warranty of  
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+**  
+*****************************************************************************/  
