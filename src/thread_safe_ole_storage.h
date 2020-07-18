@@ -8,7 +8,7 @@
 class ThreadSafeOLEStreamReader;
 using namespace wvWare;
 
-class ThreadSafeOLEStorage : public AbstractOLEStorage
+class ThreadSafeOLEStorage : public OLEStorage
 {
 	private:
 		struct Implementation;
@@ -27,7 +27,7 @@ class ThreadSafeOLEStorage : public AbstractOLEStorage
 		bool enterDirectory(const std::string& directory_path);
 		bool leaveDirectory();
 		bool readDirectFromBuffer(unsigned char* buffer, int size, int offset);
-		AbstractOLEStreamReader* createStreamReader(const std::string& stream_path);
+		OLEStreamReader* createStreamReader(const std::string& stream_path);
 	private:
 		void streamDestroyed(OLEStream* stream);
 };

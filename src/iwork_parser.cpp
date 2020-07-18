@@ -37,13 +37,13 @@
 #include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
+#include <cmath>
 #include <sstream>
 #include "doctotext_unzip.h"
 #include "entities.h"
 #include <map>
 #include <list>
 #include <vector>
-#include <cmath>
 #include "misc.h"
 #include "metadata.h"
 

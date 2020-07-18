@@ -18,12 +18,8 @@ ifeq ($(ARCH),x86-linux)
 else
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
-		STRIP = strip -x
-		ifdef MACOSX_ARCH
-			ARCH = $(MACOSX_ARCH)-macosx
-		else
-			ARCH = i386-x86_64-macosx
-		endif
+		STRIP = touch
+		ARCH = i386-x86_64-macosx
 		ifeq ($(MACOSX_STATIC),1)
 			ARCH := $(ARCH)-static
 		endif
@@ -92,21 +88,22 @@ ifeq ($(WIN),1)
 else
 ifeq ($(UNAME),Darwin)
 ifneq ($(MACOSX_STATIC),1)
-	cp /opt/local/lib/libxml2.2.dylib build/
-	cp /opt/local/lib/liblzma.5.dylib build/
-	cp /opt/local/lib/libbz2.1.dylib build/
-	cp /opt/local/lib/libiconv.2.dylib build/
-	cp /opt/local/lib/libffi.6.dylib build/
+	cp /usr/lib/libxml2.2.dylib build/
+	cp /usr/lib/liblzma.5.dylib build/
+	cp /usr/lib/libbz2.1.0.dylib build/
+	cp /usr/lib/libiconv.2.dylib build/
+	cp /usr/lib/libffi.dylib build/
 	cp 3rdparty/wv2/lib/libwv2.1.dylib build/
 	cp 3rdparty/mimetic/lib/libmimetic.0.dylib build/
+	chmod +w build/*.dylib
 	$(STRIP) build/*.dylib
 	for f in build/*.dylib build/doctotext; do \
 		install_name_tool \
-			-change /opt/local/lib/libxml2.2.dylib @executable_path/libxml2.2.dylib \
-			-change /opt/local/lib/liblzma.5.dylib @executable_path/liblzma.5.dylib \
-			-change /opt/local/lib/libbz2.1.dylib @executable_path/libbz2.1.dylib \
-			-change /opt/local/lib/libiconv.2.dylib @executable_path/libiconv.2.dylib \
-			-change /opt/local/lib/libffi.6.dylib @executable_path/libffi.6.dylib \
+			-change /usr/lib/libxml2.2.dylib @executable_path/libxml2.2.dylib \
+			-change /usr/lib/liblzma.5.dylib @executable_path/liblzma.5.dylib \
+			-change /usr/lib/libbz2.1.0.dylib @executable_path/libbz2.1.0.dylib \
+			-change /usr/lib/libiconv.2.dylib @executable_path/libiconv.2.dylib \
+			-change /usr/lib/libffi.dylib @executable_path/libffi.dylib \
 			-change /usr/local/lib/libwv2.1.dylib @executable_path/libwv2.1.dylib \
 			-change /usr/local/lib/libmimetic.0.dylib @executable_path/libmimetic.0.dylib \
 			$$f; \

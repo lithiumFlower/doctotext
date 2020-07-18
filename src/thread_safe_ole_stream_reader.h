@@ -11,7 +11,7 @@ class ThreadSafeOLEStorage;
 using namespace wvWare;
 class DataStream;
 
-class ThreadSafeOLEStreamReader : public AbstractOLEStreamReader
+class ThreadSafeOLEStreamReader : public OLEStreamReader
 {
 	friend class ThreadSafeOLEStorage;
 	private:

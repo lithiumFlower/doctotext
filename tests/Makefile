@@ -36,7 +36,7 @@ else
 	SOPRE = lib
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
-		LIB_PATH = DYLD_FALLBACK_LIBRARY_PATH=../build
+		LIB_PATH = DYLD_LIBRARY_PATH=../build
 		SOEXT = .dylib
                 FILE_OWNER = stat -f %Su
 		ifdef MACOSX_ARCH
@@ -59,11 +59,13 @@ else
 endif
 endif
 
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=1 -undefined dynamic_lookup 
+LDFLAGS += -undefined dynamic_lookup 
 ifeq ($(WIN),1)
-CXXFLAGS += -I../3rdparty/pthreads/include -D_GLIBCXX_USE_CXX11_ABI=0
-LDFLAGS += -L../3rdparty/pthreads/lib -lpthreadGC2
+CXXFLAGS += -I../3rdparty/pthreads/include
+LDFLAGS += -L../3rdparty/pthreads/lib -lpthreadGC2 
 else
-LDFLAGS += -lpthread
+LDFLAGS += -L/usr/lib -lSystem -lpthread
 endif
 
 SKIP_TESTS = ! $(shell file ../build/doctotext$(EXEEXT) | grep i386 > /dev/null && ! uname -m | grep 64 > /dev/null; echo $$?)
@@ -214,7 +216,7 @@ update_tests:
 	@echo
 
 c_api_test$(EXEEXT): c_api_test.c ../build/doctotext_c_api.h ../build/$(SOPRE)doctotext$(SOEXT)
-	$(LIB_PATH) $(CC) -o c_api_test$(EXEEXT) c_api_test.c -L../build/ -ldoctotext $(ARCH_FLAGS)
+	$(LIB_PATH) $(CC) -o c_api_test$(EXEEXT) c_api_test.c -L../build/ -ldoctotext $(ARCH_FLAGS) -undefined dynamic_lookup -L/usr/lib -lSystem
 	$(STRIP) c_api_test$(EXEEXT)
 
 cpp_api_test$(EXEEXT): cpp_api_test.cpp ../build/plain_text_extractor.h ../build/formatting_style.h ../build/$(SOPRE)doctotext$(SOEXT)

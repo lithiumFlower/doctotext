@@ -36,7 +36,7 @@
 
 #include <iostream>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include "metadata.h"
 #include "misc.h"
 #include "oshared.h"
@@ -343,7 +343,7 @@ bool PPTParser::isPPT()
 		delete storage;
 		return false;
 	}
-	AbstractOLEStreamReader* reader = storage->createStreamReader("PowerPoint Document");
+	OLEStreamReader* reader = storage->createStreamReader("PowerPoint Document");
 	if (reader == NULL)
 	{
 		delete storage;

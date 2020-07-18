@@ -1,7 +1,7 @@
 LIBICONV_VERSION=1.11
 ZLIB_VERSION=1.2.7
 LIBXML2_VERSION=2.7.7
-WV2_VERSION=0.2.3_patched_4
+WV2_VERSION=0.4.2
 HTMLCXX_VERSION=0.85
 PTHREADS_VERSION=2.9.1
 KOREAN_CMAP_VERSION=1-2
@@ -10,7 +10,7 @@ GB_CMAP_VERSION=1-5
 CNS_CMAP_VERSION=1-6
 TO_UNICODE_CMAP_VERSION=20091116
 LIBCHARSETDETECT_VERSION=1.0
-MIMETIC_VERSION=0.9.7
+MIMETIC_VERSION=0.9.7-fixed
 
 ifneq (,$(filter $(ARCH),win32 win64))
 	ifeq ($(ARCH),win32)
@@ -34,7 +34,7 @@ else
 		ifdef MACOSX_ARCH
 			ARCH_FLAGS = -arch $(MACOSX_ARCH)
 		else
-			ARCH_FLAGS = -arch i386 -arch x86_64
+			ARCH_FLAGS = -arch x86_64
 		endif
 		CONFIG_ARGS = --disable-dependency-tracking
 		WGET = curl -O -L
@@ -113,13 +113,13 @@ else
 wv2_deps =
 endif
 
-wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2 wv2-$(WV2_VERSION)-private_headers.tar.bz2
+wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2 #wv2-$(WV2_VERSION)-private_headers.tar.bz2
 	sha1sum -c wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2.sha1
 	tar -xjvf wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2
-	sha1sum -c wv2-$(WV2_VERSION)-private_headers.tar.bz2.sha1
-	tar -xjvf wv2-$(WV2_VERSION)-private_headers.tar.bz2
-	mv wv2-$(WV2_VERSION)-private_headers/*.h wv2/include/wv2/
-	rm -rf wv2-$(WV2_VERSION)-private_headers
+	#sha1sum -c wv2-$(WV2_VERSION)-private_headers.tar.bz2.sha1
+	#tar -xjvf wv2-$(WV2_VERSION)-private_headers.tar.bz2
+	#mv wv2-$(WV2_VERSION)-private_headers/*.h wv2/include/wv2/
+	#rm -rf wv2-$(WV2_VERSION)-private_headers
 	touch wv2
 
 wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2:

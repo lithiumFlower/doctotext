@@ -36,7 +36,7 @@
 
 #include <iostream>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include "misc.h"
 #include "oshared.h"
 #include <set>
@@ -873,7 +873,7 @@ bool XLSParser::isXLS()
 		delete storage;
 		return false;
 	}
-	AbstractOLEStreamReader* reader = storage->createStreamReader("Workbook");
+	OLEStreamReader* reader = storage->createStreamReader("Workbook");
 	if (reader == NULL)
 		reader = storage->createStreamReader("Book");
 	if (reader == NULL)

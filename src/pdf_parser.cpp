@@ -48,6 +48,7 @@
 #include <string.h>
 #include <vector>
 #include <zlib.h>
+#include <cmath>
 
 //some functions specific for this parser
 

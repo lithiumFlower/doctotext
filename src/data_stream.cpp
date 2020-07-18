@@ -35,7 +35,7 @@
 #include "data_stream.h"
 
 #include <new>
-#include <cstring>
+#include <string.h>
 
 struct FileStream::Implementation
 {
