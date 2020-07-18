@@ -18,7 +18,7 @@ ifeq ($(ARCH),x86-linux)
 else
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
-		STRIP = touch
+		STRIP = strip -x
 		ARCH = i386-x86_64-macosx
 		ifeq ($(MACOSX_STATIC),1)
 			ARCH := $(ARCH)-static
