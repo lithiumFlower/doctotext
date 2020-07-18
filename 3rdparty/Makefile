@@ -38,6 +38,7 @@ else
 		endif
 		CONFIG_ARGS = --disable-dependency-tracking
 		WGET = curl -O -L
+		CC=/usr/local/bin/gcc-10
 	else
 		UNAME_M = $(shell uname -m)
 		ifeq ($(UNAME_M),x86_64)

@@ -26,7 +26,6 @@ EXEEXT = .exe
 SOPRE =
 SOEXT = .dll
 CXXFLAGS += -I../3rdparty/libiconv/include -I../3rdparty/libcharsetdetect/include -I../3rdparty/zlib/include -I../3rdparty/libxml2/include/libxml2 -I../3rdparty/pthreads/include -I../3rdparty/mimetic/include
-CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 LDFLAGS += ../3rdparty/unzip101e/iowin32.o \
 	-L../3rdparty/wv2/$(LIBDIR) -lwv2 \
 	-L../3rdparty/htmlcxx/$(LIBDIR) -lhtmlcxx \
@@ -39,7 +38,8 @@ LDFLAGS += ../3rdparty/unzip101e/iowin32.o \
 LDFLAGS += -Wl,--out-implib,libdoctotext.a,--allow-multiple-definition
 SHARED = -shared
 else
-CXX = g++
+CXX = /usr/local/bin/g++-10
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 EXEEXT =
 CXXFLAGS += -I`xcrun --show-sdk-path`/usr/include/libxml2  -I../3rdparty/libcharsetdetect/include -I../3rdparty/mimetic/include
 LDFLAGS += -L../3rdparty/htmlcxx/lib -lhtmlcxx -lpthread -L../3rdparty/libcharsetdetect/lib -lcharsetdetect 

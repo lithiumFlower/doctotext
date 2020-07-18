@@ -17,7 +17,6 @@ ifneq (,$(filter $(ARCH),win32 win64))
 	endif
 	FILE_OWNER = stat -c %U
 	WIN = 1
-	CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=1
 else
 ifeq ($(ARCH),x86-linux)
 	EXEEXT =
@@ -39,26 +38,26 @@ else
 	ifeq ($(UNAME),Darwin)
 		LIB_PATH = DYLD_FALLBACK_LIBRARY_PATH=../build
 		SOEXT = .dylib
-                FILE_OWNER = stat -f %Su
-		ifdef MACOSX_ARCH
-                        ARCH_FLAGS += -arch $(MACOSX_ARCH)
-                else
-                        ARCH_FLAGS += -arch i386 -arch x86_64
-                endif
+		ARCH_FLAGS += -arch x86_64
+		FILE_OWNER = stat -f %Su
+		CXX = /usr/local/bin/g++-10
+		CC = /usr/local/bin/gcc-10
 	else
 		LIB_PATH = LD_LIBRARY_PATH=../build
 		SOEXT = .so
 		FILE_OWNER = stat -c %U
 		ARCH_FLAGS =
+		CC = gcc
+		CXX = g++
 	endif
 	EXEC = $(LIB_PATH)
 	TIME_EXEC = $(LIB_PATH) time
-	CC = gcc
-	CXX = g++
 	STRIP = strip
 	WIN = 0
 endif
 endif
+
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 
 ifeq ($(WIN),1)
 CXXFLAGS += -I../3rdparty/pthreads/include

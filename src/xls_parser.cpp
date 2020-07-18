@@ -36,7 +36,7 @@
 
 #include <iostream>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include "misc.h"
 #include "oshared.h"
 #include <set>
