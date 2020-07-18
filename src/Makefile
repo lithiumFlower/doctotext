@@ -26,6 +26,7 @@ EXEEXT = .exe
 SOPRE =
 SOEXT = .dll
 CXXFLAGS += -I../3rdparty/libiconv/include -I../3rdparty/libcharsetdetect/include -I../3rdparty/zlib/include -I../3rdparty/libxml2/include/libxml2 -I../3rdparty/pthreads/include -I../3rdparty/mimetic/include
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 LDFLAGS += ../3rdparty/unzip101e/iowin32.o \
 	-L../3rdparty/wv2/$(LIBDIR) -lwv2 \
 	-L../3rdparty/htmlcxx/$(LIBDIR) -lhtmlcxx \
@@ -38,10 +39,10 @@ LDFLAGS += ../3rdparty/unzip101e/iowin32.o \
 LDFLAGS += -Wl,--out-implib,libdoctotext.a,--allow-multiple-definition
 SHARED = -shared
 else
-CXX = clang++
+CXX = g++
 EXEEXT =
-CXXFLAGS += -I`xcrun --show-sdk-path`/usr/include/libxml2  -I../3rdparty/libcharsetdetect/include -I../3rdparty/mimetic/include -I../3rdparty/gsf/include/libgsf-1 -I../3rdparty/glib/include/glib-2.0 -I../3rdparty/glib/lib/glib-2.0/include
-LDFLAGS += -L../3rdparty/htmlcxx/lib -lhtmlcxx -lpthread -L../3rdparty/libcharsetdetect/lib -lcharsetdetect -L../3rdparty/gsf/lib -lgsf -L../3rdparty/glib/lib -lglib
+CXXFLAGS += -I`xcrun --show-sdk-path`/usr/include/libxml2  -I../3rdparty/libcharsetdetect/include -I../3rdparty/mimetic/include
+LDFLAGS += -L../3rdparty/htmlcxx/lib -lhtmlcxx -lpthread -L../3rdparty/libcharsetdetect/lib -lcharsetdetect 
 ifeq ($(MACOSX_STATIC),1)
 	LDFLAGS += ../3rdparty/mimetic/lib/libmimetic.a ../3rdparty/wv2/lib/libwv2.a /opt/local/lib/libffi.a /opt/local/lib/libbz2.a /usr/lib/libiconv.2.dylib /opt/local/lib/libiconv.a /opt/local/lib/libxml2.a /opt/local/lib/libz.a /opt/local/lib/liblzma.a -framework CoreServices
 else
@@ -50,7 +51,7 @@ endif
 	SOPRE = lib
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
-		STRIP = touch
+		STRIP = strip -x
 		SOEXT = .dylib
 		CXXFLAGS += -arch x86_64
 		LDFLAGS += -arch x86_64

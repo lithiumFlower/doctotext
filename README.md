@@ -5,13 +5,13 @@ As of 07/14/2020 there were a number of issues with the distributed DocToText on
 
 1. It is open source but there is no version control available
 2. The last release was 6 years ago
-3. The source doesn't compile out of the box. Why? Presumably because of old machines using old compilers and builds being ran by hand such that they're non-repeatable.
+3. The source doesn't compile out of the box.
     - The 3rd party Makefile does not download shasums
     - There are pointer to nonpointer comparisons
     - cxx11 abi compatibility issues
     - Duplicate exception symbols
     - Missing return statement causing segfault
-    - 3rdparty/mimetic includes attempts to use member access through . on a pointer (will crash)
+    - 3rdparty/mimetic member access through . on a pointer crashes
         - The shipped 3rdparty mimetic headers have been fixed and repackaged under version 0.9.7-fixed. The original ws 0.9.7.
     - pkg-config on Mac does not find libxml2 includes for modern OS versions
 4. The binaries are non-relocatable. 
@@ -20,7 +20,6 @@ As of 07/14/2020 there were a number of issues with the distributed DocToText on
     - There is some manual usage of install_name_tool on mac to make the dylibs redistributable (at least with respect to the executable path), however the distributed binaries do not have the @executable_path/ rpath embedded as would be expected if these scripts had been run
 5. There are memory leaks in the distributed OLE reader
 6. The 3rdparty buildsystem relies on SILVERCODERS distribution servers remaining online and the packages places there to not change. 3rdparty/Makefile downlods a numbers of precompiles packages for each platform from SILVERCODERS hosting.
-    - The current quick-and-dirty solution to this is to host all SILVERCODERS downloads in the repo here, adding about 30 MB to the repo size. These are the .bz2 and .bz2.sha1 files in 3rdparty.
 
 ### Building
 #### Windows
