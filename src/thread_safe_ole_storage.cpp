@@ -35,7 +35,7 @@
 #include "thread_safe_ole_storage.h"
 
 #include "data_stream.h"
-#include <cmath>
+#include <math.h>
 #include "misc.h"
 #include <new>
 #include <stdio.h>
@@ -729,7 +729,7 @@ bool ThreadSafeOLEStorage::leaveDirectory()
 	return true;
 }
 
-OLEStreamReader *ThreadSafeOLEStorage::createStreamReader(const std::string& stream_path)
+AbstractOLEStreamReader *ThreadSafeOLEStorage::createStreamReader(const std::string& stream_path)
 {
 	if (impl == NULL || impl->m_is_valid_ole == false || impl->m_current_directory == NULL)
 		return NULL;

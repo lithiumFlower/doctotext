@@ -175,14 +175,14 @@ static bool parse_comments(const Parser* parser, std::ostream& log_stream, std::
 
 	U32 atn_part_cp = parser->fib().ccpText + parser->fib().ccpFtn + parser->fib().ccpHdd + parser->fib().ccpMcr;
 	log_stream << "Annotations part at CP " << atn_part_cp << ".\n";
-	OLEStreamReader* reader = parser->m_storage->createStreamReader("WordDocument");
+	AbstractOLEStreamReader* reader = parser->m_storage->createStreamReader("WordDocument");
 	if (!reader)
 	{
 		log_stream << "Error opening WordDocument stream.\n";
 		return false;
 	}
 	const Parser9x* parser9 = dynamic_cast<const Parser9x*>(parser);
-	OLEStreamReader* table_reader = parser->m_storage->createStreamReader(parser9->tableStream());
+	AbstractOLEStreamReader* table_reader = parser->m_storage->createStreamReader(parser9->tableStream());
 	if (!table_reader)
 	{
 		log_stream << "Error opening table stream..\n";
@@ -232,7 +232,7 @@ static bool parse_comments(const Parser* parser, std::ostream& log_stream, std::
 			log_stream << "Stream pos " << reader->tell() << "\n";
 			#warning TODO: Unicode support in comments
 			if (unicode)
-				reader->seek(1, G_SEEK_CUR); // skip unicode byte
+				reader->seek(1, SEEK_CUR); // skip unicode byte
 			S8 ch = reader->readS8();
 			if (ch >= 32 || (ch >= 8 && ch <= 13))
 			{
@@ -678,15 +678,12 @@ bool DOCParser::isDOC()
 		fclose(f);
 	impl->modifyCerr();
 	ThreadSafeOLEStorage* storage = NULL;
-	SharedPtr<Parser> parser;
 	//storage will be deleted inside parser from wv2 library
-	if (impl->m_buffer) {
+	if (impl->m_buffer)
 		storage = new ThreadSafeOLEStorage(impl->m_buffer, impl->m_buffer_size);
-        parser = ParserFactory::createParser(reinterpret_cast<const unsigned char*>(impl->m_buffer), impl->m_buffer_size);
-    } else {
+	else
 		storage = new ThreadSafeOLEStorage(impl->m_file_name);
-        parser = ParserFactory::createParser(impl->m_file_name);
-    }
+	SharedPtr<Parser> parser = ParserFactory::createParser(storage);
 	impl->restoreCerr();
 	if (!parser || !parser->isOk())
 	{
@@ -769,11 +766,7 @@ std::string DOCParser::plainText(const FormattingStyle& formatting)
 	storage->leaveDirectory();
 	curr_state.obj_texts_iter = curr_state.obj_texts.begin();
 	impl->modifyCerr();
-	SharedPtr<Parser> parser;
-	if (impl->m_buffer)
-        parser = ParserFactory::createParser(reinterpret_cast<const unsigned char *>(impl->m_buffer), impl->m_buffer_size);
-	else
-        parser = ParserFactory::createParser(impl->m_file_name);
+	SharedPtr<Parser> parser = ParserFactory::createParser(storage);
 	impl->restoreCerr();
 	if (!parser || !parser->isOk())
 	{

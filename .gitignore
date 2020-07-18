@@ -2,3 +2,5 @@
 *.zip
 *.o
 *.idea
+*.bz2
+*.sha1

@@ -51,7 +51,7 @@ struct ThreadSafeOLEStreamReader::Implementation
 };
 
 ThreadSafeOLEStreamReader::ThreadSafeOLEStreamReader(ThreadSafeOLEStorage *storage, Stream &stream)
-	: OLEStreamReader((GsfInput*)stream, (OLEStorage*)storage)
+	: AbstractOLEStreamReader((AbstractOLEStorage*)storage)
 {
 	impl = NULL;
 	try
