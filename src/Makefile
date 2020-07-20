@@ -12,6 +12,8 @@ HEADERS = ../version.h data_stream.h doc_parser.h exception.h html_parser.h iwor
 	xml_fixer.h doctotext_unzip.h pdf_parser.h ppt_parser.h xls_parser.h xlsb_parser.h thread_safe_ole_storage.h thread_safe_ole_stream_reader.h txt_parser.h \
 	attachment.h eml_parser.h variant.h doctotext_c_api.h odfxml_parser.h xml_stream.h common_xml_document_parser.h
 
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+
 ifneq (,$(filter $(ARCH),win32 win64))
 	ifeq ($(ARCH),win32)
 		STRIP = i686-w64-mingw32-strip
@@ -38,7 +40,6 @@ ifneq (,$(filter $(ARCH),win32 win64))
     LDFLAGS += -Wl,--out-implib,libdoctotext.a,--allow-multiple-definition
     SHARED = -shared
 else
-    CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
     EXEEXT =
     CXXFLAGS += -I`xcrun --show-sdk-path`/usr/include/libxml2  -I../3rdparty/libcharsetdetect/include -I../3rdparty/mimetic/include
     SOPRE = lib

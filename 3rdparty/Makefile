@@ -10,7 +10,7 @@ GB_CMAP_VERSION=1-5
 CNS_CMAP_VERSION=1-6
 TO_UNICODE_CMAP_VERSION=20091116
 LIBCHARSETDETECT_VERSION=1.0
-MIMETIC_VERSION=0.9.7-fixed
+MIMETIC_VERSION=0.9.7
 
 ifneq (,$(filter $(ARCH),win32 win64))
 	ifeq ($(ARCH),win32)
@@ -30,6 +30,7 @@ ifeq ($(ARCH),x86-linux)
 else
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
+		MIMETIC_VERSION = 0.9.7-fixed
 		ARCH = i386-x86_64-macosx
 		ifdef MACOSX_ARCH
 			ARCH_FLAGS = -arch $(MACOSX_ARCH)
