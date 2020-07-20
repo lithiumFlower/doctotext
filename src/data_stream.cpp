@@ -130,7 +130,7 @@ bool FileStream::unGetc(int ch)
 {
 	if (!impl->m_opened)
 		return false;
-	return ungetc(ch, impl->m_file) == ch;
+    return ungetc(ch, impl->m_file) == ch;
 }
 
 size_t FileStream::size()
@@ -253,6 +253,7 @@ bool BufferStream::unGetc(int ch)
 	if (impl->m_pointer < 1)
 		return false;
 	--impl->m_pointer;
+    return true;
 }
 
 size_t BufferStream::size()

@@ -6,36 +6,53 @@ As of 07/14/2020 there were a number of issues with the distributed DocToText on
 1. It is open source but there is no version control available
 2. The last release was 6 years ago
 3. The source doesn't compile out of the box.
-    - The 3rd party Makefile does not download shasums
-    - There are pointer to nonpointer comparisons
-    - cxx11 abi compatibility issues
-    - Duplicate exception symbols
-    - Missing return statement causing segfault
-    - 3rdparty/mimetic member access through . on a pointer crashes
-        - The shipped 3rdparty mimetic headers have been fixed and repackaged under version 0.9.7-fixed. The original ws 0.9.7.
-    - pkg-config on Mac does not find libxml2 includes for modern OS versions
-4. The binaries are non-relocatable. 
+4. Various crashes, memory leaks
+5. The binaries are non-relocatable. 
     - This is fine for using the distributed doctotext executable where we can easily set DYLIB_LIBRARY_PATH, LD_LIBRARY_PATH, etc, however when creating another program and linking against doctotext see the next point -
     - On Linux and Mac the distributed shared libraries will not be properly loaded unless placed in system locations. This prevents anyone who is creating a library that links the doctotext shared lib from distributing it as a standalone package. The shared libraries that doctotext.{dll,dylib,so} load will have to be placed in system locations. For building, for example, a python extension, it is already a challenge to link against and redistribute a chain of shared libs. It is much more work and not a maintainable solution for future releases to have to fix the the rpath entries on Mac and Linux first.
     - There is some manual usage of install_name_tool on mac to make the dylibs redistributable (at least with respect to the executable path), however the distributed binaries do not have the @executable_path/ rpath embedded as would be expected if these scripts had been run
-5. There are memory leaks in the distributed OLE reader
-6. The 3rdparty buildsystem relies on SILVERCODERS distribution servers remaining online and the packages places there to not change. 3rdparty/Makefile downlods a numbers of precompiles packages for each platform from SILVERCODERS hosting.
+
+This repo aims to fix the above issues.
+
+### Creating relocatable libraries
+Tthe binaries and main program can be made redistributable by simply keeping all distributed shared libraries in the same directory with it.  
+On windows we search the loading executable/dll directory first by standard. On Mac and Linux we set both the identity of the main library `libdoctotext` and all supported libraries to `@rpath/<libname>`. Further, all referenced libraries (except system libs) are `@rpath/<libname>` as well. On mac we can simply set the rpath of a host program to `@loader_path` and as long as everything stays in the same directory, all libs will automatically load. Linux will use an rpath of `$ORIGIN`.
 
 ### Building
+The result of a `make -j` will create a build folder analagous to the tagged releases:
+1. The build executable and associated script depending on platform at
+2. A shared library to link against should you wish to compile against it
+3. The required headers (toplevel in build)
+4. build/resrouces - resources for parsing pdfs, currently incomplete
+5. the library documentation at build/doc
+6. all needed dll, dylib, that the main libdoctotext and or executable needs to be shipped as a standalone library or application
+7. VERSION file and ChangeLog
+
 #### Windows
 Ensure the following are installed and in the path:
 - doxygen
-- mingw-64 with sljl exception handling
+- mingw-64 with sjlj exception handling
     - this must be in the path before any other mingw installations or things can break
 - gnu make (can use from any mingw)
 
-The most recent compilation was done in a git-bash shell using mingw64
+Tested in a git-bash shell using mingw64 on windows 10 64bit
+
+`ARCH=win64 make -j`
+
+Note that due to the mingw compilation, if you with to use MSVC toolchain you must use the c api. See the auto-generated `doc` folder for more info.
 
 #### Mac
-Building on Mac will take some extra work. My initial attempt was not a "just compile it and ship it over morning coffee" task. It appears that the 3rdparty libraries like wv2 are compiled against libstdc++. The standard on OSX is now libc++. I no longer have the requisite headers available on my machine to compile against libstdc++ - as of Xcode 10 this support was dropped. This leads to:
-1. Udating the 3rdparty libraries. Most of them should be straightforward but wv2 will be a bit more of a lift. Normally wv2 requires gsf which in turn requires glib, however SILVERCODERS has patched their ancient version (0.2.3) to no longer rely on gsf+glib. Additionally it takes different interface (the custom ThreadSafeOLEStorage class instead opposed to buffers and strings). In order to preserve the distributable nature of the package gsf and glib will need to be repackaged along with a modern version of wv2. The new classes of wv2 (OLEStorage, OLEStreamReader, which replace AbstractOLEStorage, AbstractOLEStreamReader) will need to be used. And finally, the new classes cause other glib/gsf dependent changes, such as stream changes for compatibility with GsfInput. I hope I've missed a simpler alternative.
-2. For now I'll probably just make a custom installation of gnu gcc on my mac. 
+Install the following through homebrew:
+- doxygen, libffi, libxml2, zlib, xz, gcc
+libffi, libxml2, zlib, and xz will be statically linked through their /usr/local/opt/ -> /usr/local/Cellar/ symlinks
 
+The Makefile will use the full path to GNU g++ 10 (installed through `brew install gcc` at `/usr/local/bin/g++-10`). If you have different version edit the makefile and change the `src/Makefile` `CXX` setting for Darwin, as well as the corresponding main `Makefile` `STD_LIB_PATH` and `GCC_LIB_PATH`.
+
+Note that the system gcc and g++ *will not work*. The system gcc and g++ compile against Mac's `libc++` which is Mac's implementation of a c++11 compatible standard library. Unfortunately because we are linking with precompiled libs distributed by SILVERCODERS which were compiled pre c++11 with GNU g++ we must use GNU g++ for its ability to be abi compatible with pre c++11 libraries linked against the gnu `libstdc++`. Mac removed their GNU compatibility and distributed headers as of Xcode 10.
+
+Tested on Catalina
+
+`make -j`
 
 #### Linux
 TODO

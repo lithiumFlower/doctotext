@@ -54,12 +54,6 @@ else
 endif
 endif
 
-ifeq ($(DEBUG), 1)
-	ARCH_D = $(ARCH)-debug
-else
-	ARCH_D = $(ARCH)
-endif
-
 pwd = $(shell pwd)
 
 ifeq ($(WIN),1)
@@ -114,18 +108,18 @@ else
 wv2_deps =
 endif
 
-wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2 wv2-$(WV2_VERSION)-private_headers.tar.bz2
-	sha1sum -c wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2.sha1
-	tar -xjvf wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2
+wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH).tar.bz2 wv2-$(WV2_VERSION)-private_headers.tar.bz2
+	sha1sum -c wv2-$(WV2_VERSION)-$(ARCH).tar.bz2.sha1
+	tar -xjvf wv2-$(WV2_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c wv2-$(WV2_VERSION)-private_headers.tar.bz2.sha1
 	tar -xjvf wv2-$(WV2_VERSION)-private_headers.tar.bz2
 	mv wv2-$(WV2_VERSION)-private_headers/*.h wv2/include/wv2/
 	rm -rf wv2-$(WV2_VERSION)-private_headers
 	touch wv2
 
-wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2:
-	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2
-	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2.sha1
+wv2-$(WV2_VERSION)-$(ARCH).tar.bz2:
+	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH).tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH).tar.bz2.sha1
 
 wv2-$(WV2_VERSION)-private_headers.tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-private_headers.tar.bz2

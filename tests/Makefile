@@ -36,12 +36,13 @@ else
 	SOPRE = lib
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
-		LIB_PATH = DYLD_FALLBACK_LIBRARY_PATH=../build
+		LIB_PATH = DYLD_LIBRARY_PATH=../build
 		SOEXT = .dylib
 		ARCH_FLAGS += -arch x86_64
 		FILE_OWNER = stat -f %Su
 		CXX = /usr/local/bin/g++-10
 		CC = /usr/local/bin/gcc-10
+		STRIP = strip -x
 	else
 		LIB_PATH = LD_LIBRARY_PATH=../build
 		SOEXT = .so
@@ -49,10 +50,10 @@ else
 		ARCH_FLAGS =
 		CC = gcc
 		CXX = g++
+		STRIP = strip
 	endif
 	EXEC = $(LIB_PATH)
 	TIME_EXEC = $(LIB_PATH) time
-	STRIP = strip
 	WIN = 0
 endif
 endif
@@ -136,9 +137,15 @@ else
 	@echo
 	@echo TESTING LIBRARY C API...
 	@echo
+ifneq (,$(filter $(ARCH),win32 win64))
 	$(EXEC) if ! ./c_api_test --verbose 1.html | tr -d '\r' | diff -u - c_api_test.out; then \
 		exit 1; \
 	fi
+else
+	if ! $(EXEC) ./c_api_test --verbose 1.html | tr -d '\r' | diff -u - c_api_test.out; then \
+		exit 1; \
+	fi
+endif
 	if ! cat c_api_test.log.out | tr -d '\r' | diff -u - 1.html.log; then \
 			exit 1; \
 		fi; \
@@ -146,16 +153,28 @@ else
 	@echo
 	@echo TESTING LIBRARY C++ API...
 	@echo
+ifneq (,$(filter $(ARCH),win32 win64))
 	$(EXEC) if ! ./cpp_api_test meta_libreoffice_3.5_modified.odt | tr -d '\r' | diff -u - cpp_api_test.out; then \
 		exit 1; \
 	fi
+else
+	if ! $(EXEC) ./cpp_api_test meta_libreoffice_3.5_modified.odt | tr -d '\r' | diff -u - cpp_api_test.out; then \
+		exit 1; \
+	fi
+endif
 	@echo
 	@echo TESTING LIBRARY C++ API IN MULTITHREAD ENVIRONMENT...
 	@echo
 	# not including eml - eml is not threadsafe and will cause a rare crash
+ifneq (,$(filter $(ARCH),win32 win64))
 	$(EXEC) if ! ./multithreading_test $(addprefix *.,odt fodt ods fods odp fodp odg fodg rtf doc xls xlsb pdf ppt docx xlsx pptx pages numbers key html text) > /dev/null; then \
 		exit 1; \
 	fi
+else
+	if ! $(EXEC) ./multithreading_test $(addprefix *.,odt fodt ods fods odp fodp odg fodg rtf doc xls xlsb pdf ppt docx xlsx pptx pages numbers key html text) > /dev/null; then \
+		exit 1; \
+	fi
+endif
 	@echo
 	@echo TESTING LOGS REDIRECTION...
 	@echo
