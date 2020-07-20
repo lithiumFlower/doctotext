@@ -60,7 +60,8 @@ else
                    /usr/local/opt/zlib/lib/libz.a \
                    /usr/local/opt/xz/lib/liblzma.a \
                    /usr/lib/libiconv.dylib \
-                   -framework CoreServices
+                   -framework CoreServices \
+			      -static-libgcc -static-libstdc++
     else
         CXX = g++
         STRIP = strip
