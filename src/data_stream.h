@@ -1,7 +1,7 @@
 #ifndef DOCTOTEXT_DATA_STREAM_H
 #define DOCTOTEXT_DATA_STREAM_H
 
-#include <cstdio>
+#include <stdio.h>
 #include <string>
 
 class DataStream

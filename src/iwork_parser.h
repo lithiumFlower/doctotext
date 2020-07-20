@@ -7,7 +7,7 @@
 
 namespace doctotext
 {
-	class FormattingStyle;
+	struct FormattingStyle;
 	class Metadata;
 }
 

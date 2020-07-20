@@ -18,15 +18,12 @@ ifeq ($(ARCH),x86-linux)
 else
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
+	    STD_LIB = libstdc++.6.dylib
+	    GCC_LIB = libgcc_s.1.dylib
+		STD_LIB_PATH = /usr/local/opt/gcc/lib/gcc/10/$(STD_LIB)
+		GCC_LIB_PATH = /usr/local/lib/gcc/10/$(GCC_LIB)
 		STRIP = strip -x
-		ifdef MACOSX_ARCH
-			ARCH = $(MACOSX_ARCH)-macosx
-		else
-			ARCH = i386-x86_64-macosx
-		endif
-		ifeq ($(MACOSX_STATIC),1)
-			ARCH := $(ARCH)-static
-		endif
+		ARCH = i386-x86_64-macosx
 		SOEXT = .dylib
 	else
 		STRIP = strip
@@ -91,27 +88,20 @@ ifeq ($(WIN),1)
 	$(STRIP) build/*.dll
 else
 ifeq ($(UNAME),Darwin)
-ifneq ($(MACOSX_STATIC),1)
-	cp /opt/local/lib/libxml2.2.dylib build/
-	cp /opt/local/lib/liblzma.5.dylib build/
-	cp /opt/local/lib/libbz2.1.dylib build/
-	cp /opt/local/lib/libiconv.2.dylib build/
-	cp /opt/local/lib/libffi.6.dylib build/
-	cp 3rdparty/wv2/lib/libwv2.1.dylib build/
-	cp 3rdparty/mimetic/lib/libmimetic.0.dylib build/
 	$(STRIP) build/*.dylib
-	for f in build/*.dylib build/doctotext; do \
-		install_name_tool \
-			-change /opt/local/lib/libxml2.2.dylib @executable_path/libxml2.2.dylib \
-			-change /opt/local/lib/liblzma.5.dylib @executable_path/liblzma.5.dylib \
-			-change /opt/local/lib/libbz2.1.dylib @executable_path/libbz2.1.dylib \
-			-change /opt/local/lib/libiconv.2.dylib @executable_path/libiconv.2.dylib \
-			-change /opt/local/lib/libffi.6.dylib @executable_path/libffi.6.dylib \
-			-change /usr/local/lib/libwv2.1.dylib @executable_path/libwv2.1.dylib \
-			-change /usr/local/lib/libmimetic.0.dylib @executable_path/libmimetic.0.dylib \
-			$$f; \
-	done
-endif
+	cp $(STD_LIB_PATH) build/
+	cp $(GCC_LIB_PATH) build/
+	chmod +xwr build/*.dylib
+	install_name_tool \
+		-change $(STD_LIB_PATH) @rpath/$(STD_LIB) \
+		-change $(GCC_LIB_PATH) @rpath/$(GCC_LIB) \
+		build/libdoctotext.dylib
+	install_name_tool \
+	    -change $(GCC_LIB_PATH) @rpath/$(GCC_LIB) \
+	    build/$(STD_LIB)
+	install_name_tool -id @rpath/$(STD_LIB) build/$(STD_LIB)
+	install_name_tool -id @rpath/$(GCC_LIB) build/$(GCC_LIB)
+	install_name_tool -id @rpath/libdoctotext.dylib build/libdoctotext.dylib
 	echo './doctotext "$$@"' > build/doctotext.sh
 else
 	cp 3rdparty/libcharsetdetect/lib/libcharsetdetect.so build

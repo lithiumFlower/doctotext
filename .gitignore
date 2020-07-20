@@ -1,6 +1,6 @@
 *.swp
-*.bz2
-*.sha1
 *.zip
 *.o
 *.idea
+*.bz2
+*.sha1

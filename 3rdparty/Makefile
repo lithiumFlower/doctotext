@@ -30,14 +30,16 @@ ifeq ($(ARCH),x86-linux)
 else
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
+		MIMETIC_VERSION = 0.9.7-fixed
 		ARCH = i386-x86_64-macosx
 		ifdef MACOSX_ARCH
 			ARCH_FLAGS = -arch $(MACOSX_ARCH)
 		else
-			ARCH_FLAGS = -arch i386 -arch x86_64
+			ARCH_FLAGS = -arch x86_64
 		endif
 		CONFIG_ARGS = --disable-dependency-tracking
 		WGET = curl -O -L
+		CC=/usr/local/bin/gcc-10
 	else
 		UNAME_M = $(shell uname -m)
 		ifeq ($(UNAME_M),x86_64)
@@ -51,12 +53,6 @@ else
 	endif
 	WIN = 0
 endif
-endif
-
-ifeq ($(DEBUG), 1)
-	ARCH_D = $(ARCH)-debug
-else
-	ARCH_D = $(ARCH)
 endif
 
 pwd = $(shell pwd)
@@ -113,18 +109,18 @@ else
 wv2_deps =
 endif
 
-wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2 wv2-$(WV2_VERSION)-private_headers.tar.bz2
-	sha1sum -c wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2.sha1
-	tar -xjvf wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2
+wv2: $(wv2_deps) wv2-$(WV2_VERSION)-$(ARCH).tar.bz2 wv2-$(WV2_VERSION)-private_headers.tar.bz2
+	sha1sum -c wv2-$(WV2_VERSION)-$(ARCH).tar.bz2.sha1
+	tar -xjvf wv2-$(WV2_VERSION)-$(ARCH).tar.bz2
 	sha1sum -c wv2-$(WV2_VERSION)-private_headers.tar.bz2.sha1
 	tar -xjvf wv2-$(WV2_VERSION)-private_headers.tar.bz2
 	mv wv2-$(WV2_VERSION)-private_headers/*.h wv2/include/wv2/
 	rm -rf wv2-$(WV2_VERSION)-private_headers
 	touch wv2
 
-wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2:
-	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2
-	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH_D).tar.bz2.sha1
+wv2-$(WV2_VERSION)-$(ARCH).tar.bz2:
+	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH).tar.bz2
+	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-$(ARCH).tar.bz2.sha1
 
 wv2-$(WV2_VERSION)-private_headers.tar.bz2:
 	$(WGET) http://silvercoders.com/download/3rdparty/wv2-$(WV2_VERSION)-private_headers.tar.bz2

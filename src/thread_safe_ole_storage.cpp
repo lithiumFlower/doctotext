@@ -35,7 +35,7 @@
 #include "thread_safe_ole_storage.h"
 
 #include "data_stream.h"
-#include <math.h>
+#include <cmath>
 #include "misc.h"
 #include <new>
 #include <stdio.h>

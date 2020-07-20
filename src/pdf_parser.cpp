@@ -6271,7 +6271,7 @@ struct PDFParser::Implementation
 
 				bool operator < (const TextElement& compared) const
 				{
-					if (abs(m_y - compared.m_y) > 4.0)	//tolerace
+					if (std::abs(m_y - compared.m_y) > 4.0)	//tolerace
 					{
 						return m_y > compared.m_y;
 					}
@@ -6280,7 +6280,7 @@ struct PDFParser::Implementation
 
 				bool operator > (const TextElement& compared) const
 				{
-					if (abs(m_y - compared.m_y) > 4.0) //tolerace
+					if (std::abs(m_y - compared.m_y) > 4.0) //tolerace
 					{
 						return m_y < compared.m_y;
 					}
@@ -6485,8 +6485,8 @@ struct PDFParser::Implementation
 							}
 							if (last)
 								str_width = x0 > x1 ? x0 - x_pos : x1 - x_pos;
-							if (abs(y1 - y0) > str_height)
-								str_height = abs(y1 - y0);
+							if (std::abs(y1 - y0) > str_height)
+								str_height = std::abs(y1 - y0);
 							if (y_pos > y1)
 								y_pos = y1;
 							if (y_pos > y0)
@@ -6495,7 +6495,7 @@ struct PDFParser::Implementation
 							m_current_state.m_line_matrix[0] += advance;
 							if (output.length() > 0 && output[output.length() - 1] == ' ')
 							{
-								space_size = abs(x0 - x1) > 1.0 ? abs(x0 - x1) : 1.0;
+								space_size = std::abs(x0 - x1) > 1.0 ? std::abs(x0 - x1) : 1.0;
 								m_current_state.m_line_matrix[0] += word_space;
 							}
 							add_charspace = true;
