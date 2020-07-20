@@ -1,0 +1,26 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: 	windows-latest
+    strategy:
+      matrix:
+        include:
+          - msystem: MINGW64
+            msystem_lower: mingw64
+            arch: x86_64
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v1
+        with:
+          msystem: MINGW64
+          install: git base-devel mingw-w64-x86_64-toolchain
+          update: true
+      - name: build-and-test
+        run: ARCH=win64 make -j
