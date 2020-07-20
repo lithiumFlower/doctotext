@@ -46,7 +46,8 @@ Install the following through homebrew:
 - doxygen, libffi, libxml2, zlib, xz, gcc
 libffi, libxml2, zlib, and xz will be statically linked through their /usr/local/opt/ -> /usr/local/Cellar/ symlinks
 
-The Makefile will use the full path to GNU g++ 10 (installed through `brew install gcc` at `/usr/local/bin/g++-10`). If you have different version edit the makefile and change the `src/Makefile` `CXX` setting for Darwin, as well as the corresponding main `Makefile` `STD_LIB_PATH` and `GCC_LIB_PATH`.
+The Makefile will use the full path to GNU g++ 10 (installed through `brew install gcc` at `/usr/local/bin/g++-10`). If you have different version edit the makefile and change the `src/Makefile` `CXX` setting for Darwin.  
+  
 
 Note that the system gcc and g++ *will not work*. The system gcc and g++ compile against Mac's `libc++` which is Mac's implementation of a c++11 compatible standard library. Unfortunately because we are linking with precompiled libs distributed by SILVERCODERS which were compiled pre c++11 with GNU g++ we must use GNU g++ for its ability to be abi compatible with pre c++11 libraries linked against the gnu `libstdc++`. Mac removed their GNU compatibility and distributed headers as of Xcode 10.
 
