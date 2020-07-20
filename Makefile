@@ -18,10 +18,6 @@ ifeq ($(ARCH),x86-linux)
 else
 	UNAME = $(shell uname)
 	ifeq ($(UNAME),Darwin)
-	    STD_LIB = libstdc++.6.dylib
-	    GCC_LIB = libgcc_s.1.dylib
-		STD_LIB_PATH = /usr/local/opt/gcc/lib/gcc/10/$(STD_LIB)
-		GCC_LIB_PATH = /usr/local/lib/gcc/10/$(GCC_LIB)
 		STRIP = strip -x
 		ARCH = i386-x86_64-macosx
 		SOEXT = .dylib
@@ -89,18 +85,7 @@ ifeq ($(WIN),1)
 else
 ifeq ($(UNAME),Darwin)
 	$(STRIP) build/*.dylib
-	cp $(STD_LIB_PATH) build/
-	cp $(GCC_LIB_PATH) build/
 	chmod +xwr build/*.dylib
-	install_name_tool \
-		-change $(STD_LIB_PATH) @rpath/$(STD_LIB) \
-		-change $(GCC_LIB_PATH) @rpath/$(GCC_LIB) \
-		build/libdoctotext.dylib
-	install_name_tool \
-	    -change $(GCC_LIB_PATH) @rpath/$(GCC_LIB) \
-	    build/$(STD_LIB)
-	install_name_tool -id @rpath/$(STD_LIB) build/$(STD_LIB)
-	install_name_tool -id @rpath/$(GCC_LIB) build/$(GCC_LIB)
 	install_name_tool -id @rpath/libdoctotext.dylib build/libdoctotext.dylib
 	echo './doctotext "$$@"' > build/doctotext.sh
 else
