@@ -48,8 +48,8 @@ else
         CXX = /usr/local/bin/g++-10
         STRIP = strip -x
         SOEXT = .dylib
-        CXXFLAGS += -arch x86_64
-        LDFLAGS += -arch x86_64
+        CXXFLAGS += -arch x86_64 -mmacosx-version-min=10.9
+        LDFLAGS += -arch x86_64 -mmacosx-version-min=10.9
         SHARED = -dynamiclib
         LDFLAGS += ../3rdparty/mimetic/lib/libmimetic.a  \
                    ../3rdparty/wv2/lib/libwv2.a \
