@@ -43,7 +43,7 @@ Note that due to the mingw compilation, if you with to use MSVC toolchain you mu
 
 #### Mac
 Install the following through homebrew:
-- doxygen, libffi, libxml2, zlib, xz, gcc
+- doxygen, libffi, zlib, xz, gcc
 libffi, libxml2, zlib, and xz will be statically linked through their /usr/local/opt/ -> /usr/local/Cellar/ symlinks
 
 The Makefile will use the full path to GNU g++ 10 (installed through `brew install gcc` at `/usr/local/bin/g++-10`). If you have different version edit the makefile and change the `src/Makefile` `CXX` setting for Darwin.  
