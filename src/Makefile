@@ -56,12 +56,12 @@ else
                    ../3rdparty/htmlcxx/lib/libhtmlcxx.a \
                    ../3rdparty/libcharsetdetect/lib/libcharsetdetect.a \
                    /usr/local/opt/libffi/lib/libffi.a \
-                   /usr/local/opt/libxml2/lib/libxml2.a \
                    /usr/local/opt/zlib/lib/libz.a \
                    /usr/local/opt/xz/lib/liblzma.a \
                    /usr/lib/libiconv.dylib \
+                   /usr/lib/libxml2.dylib \
                    -framework CoreServices \
-			      -static-libgcc -static-libstdc++
+                   -static-libgcc -static-libstdc++
     else
         CXX = g++
         STRIP = strip
