@@ -3647,20 +3647,20 @@ struct PDFParser::Implementation
 						m_root_dictionary = m_root_ref->getDictionary();
 					if (!m_root_dictionary)
 						throw doctotextex::CustomException("Root dictionary is missing!");
-				m_metadata = m_root_dictionary->getObjAsStream("Metadata");
+					m_metadata = m_root_dictionary->getObjAsStream("Metadata");
 				} catch (Exception &e) {
 					if (m_root_ref) {
-                        delete m_root_ref;
-                        m_root_ref = NULL;
-                    }
+                        			delete m_root_ref;
+                        			m_root_ref = NULL;
+                    			}
 
-                    if (m_info_ref) {
-                        delete m_info_ref;
-                        m_info_ref = NULL;
-                    }
+					if (m_info_ref) {
+					        delete m_info_ref;
+						m_info_ref = NULL;
+					}
 
-                    throw e;
-				}
+                    			throw e;
+			      }
 			}
 
 			~PDFReader()
@@ -4422,7 +4422,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
@@ -4440,7 +4440,7 @@ struct PDFParser::Implementation
 										reading_value = false;
 										reading_key = true;
 										if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        	delete dictionary.m_objects[key_name.m_value];
+                                        						delete dictionary.m_objects[key_name.m_value];
 										dictionary.m_objects[key_name.m_value] = value_object;
 									}
 									else	//hexadecimal string
@@ -4452,7 +4452,7 @@ struct PDFParser::Implementation
 										reading_value = false;
 										reading_key = true;
 										if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        	delete dictionary.m_objects[key_name.m_value];
+                                        						delete dictionary.m_objects[key_name.m_value];
 										dictionary.m_objects[key_name.m_value] = value_object;
 									}
 									break;
@@ -4465,7 +4465,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
@@ -4478,7 +4478,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
@@ -4490,7 +4490,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
@@ -4502,7 +4502,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
@@ -4515,7 +4515,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
@@ -4569,7 +4569,7 @@ struct PDFParser::Implementation
 									reading_value = false;
 									reading_key = true;
 									if (dictionary.m_objects.find(key_name.m_value) != dictionary.m_objects.end())
-                                        delete dictionary.m_objects[key_name.m_value];
+                                        					delete dictionary.m_objects[key_name.m_value];
 									dictionary.m_objects[key_name.m_value] = value_object;
 									break;
 								}
