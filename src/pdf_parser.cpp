@@ -3648,19 +3648,19 @@ struct PDFParser::Implementation
 					if (!m_root_dictionary)
 						throw doctotextex::CustomException("Root dictionary is missing!");
 					m_metadata = m_root_dictionary->getObjAsStream("Metadata");
-				} catch (Exception &e) {
+				} catch (doctotextex::CustomException& ex) {
 					if (m_root_ref) {
-                        			delete m_root_ref;
-                        			m_root_ref = NULL;
-                    			}
+                        delete m_root_ref;
+                        m_root_ref = NULL;
+                    }
 
 					if (m_info_ref) {
-					        delete m_info_ref;
+					    delete m_info_ref;
 						m_info_ref = NULL;
 					}
 
-                    			throw e;
-			      }
+                    throw ex;
+			    }
 			}
 
 			~PDFReader()
