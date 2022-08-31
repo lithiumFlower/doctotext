@@ -627,29 +627,50 @@ struct DOCParser::Implementation
 
 DOCParser::DOCParser(const std::string& file_name)
 {
-	impl = new Implementation();
-	impl->m_error = false;
-	impl->m_file_name = file_name;
-	impl->m_verbose_logging = false;
-	impl->m_log_stream = &std::cerr;
-	impl->m_buffer = NULL;
-	impl->m_buffer_size = 0;
+    impl = NULL;
+    try {
+        impl = new Implementation();
+        impl->m_error = false;
+        impl->m_file_name = file_name;
+        impl->m_verbose_logging = false;
+        impl->m_log_stream = &std::cerr;
+        impl->m_buffer = NULL;
+        impl->m_buffer_size = 0;
+    } catch (std::bad_alloc &ba) {
+        if (impl) {
+            delete impl;
+            impl = NULL;
+        }
+        throw;
+    }
 }
 
 DOCParser::DOCParser(const char *buffer, size_t size)
 {
-	impl = new Implementation();
-	impl->m_error = false;
-	impl->m_file_name = "Memory buffer";
-	impl->m_verbose_logging = false;
-	impl->m_log_stream = &std::cerr;
-	impl->m_buffer = buffer;
-	impl->m_buffer_size = size;
+    impl = NULL;
+    try {
+        impl = new Implementation();
+        impl->m_error = false;
+        impl->m_file_name = "Memory buffer";
+        impl->m_verbose_logging = false;
+        impl->m_log_stream = &std::cerr;
+        impl->m_buffer = buffer;
+        impl->m_buffer_size = size;
+    } catch (std::bad_alloc &ba) {
+        if (impl) {
+            delete impl;
+            impl = NULL;
+        }
+        throw;
+    }
 }
 
 DOCParser::~DOCParser()
 {
-	delete impl;
+    if (impl) {
+        delete impl;
+        impl = NULL;
+    }
 }
 
 void DOCParser::setVerboseLogging(bool verbose)
